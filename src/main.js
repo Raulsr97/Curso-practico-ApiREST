@@ -47,12 +47,26 @@ async function getCategoriesPreview() {
         const categoryTitle = document.createElement('h3')
         categoryTitle.classList.add('category-title')
         categoryTitle.setAttribute('id', 'id' + category.id)
+        categoryTitle.addEventListener('click', () => {
+            location.hash = `#category=${category.id}-${category.name}`
+        })
         const categoryTitleText = document.createTextNode(category.name)
 
         categoriesPreviewList.appendChild(categoryContainer)
         categoryContainer.appendChild(categoryTitle)
         categoryTitle.appendChild(categoryTitleText)
     })
+    
+}
+
+async function getMoviesByCategory(id) {
+    const { data } = await api('/discover/movie', {
+        params: {
+            with_genres: id
+        }
+    })
+
+    console.log(data);
     
 }
 
