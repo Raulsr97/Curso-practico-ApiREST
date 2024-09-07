@@ -27,6 +27,9 @@ function navigator() {
     } else {
         homePage()
     }
+
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
 }
 
 function homePage() {
@@ -67,6 +70,8 @@ function categoriesPage() {
 
     const [_, categoryData] = location.hash.split('=') // ['#category', 'id-name']
     const [categoryId, categoryName]   = categoryData.split('-')
+
+    headerCategoryTitle.innerText = categoryName
 
     getMoviesByCategory(categoryId)
 }
@@ -121,3 +126,4 @@ function trendsPage() {
     genericSection.classList.remove('inactive')
     movieDetailSection.classList.add('inactive')
 }
+ 

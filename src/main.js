@@ -8,15 +8,12 @@ const api = axios.create({
     } 
 })
 
-async function getTrendingMoviesPreview () {
-    const { data } = await api('trending/movie/day')
-    const movies = data.results
+// Funciones auxiliares
 
-    trendingMoviesPreviewList.innerHTML = ''
-    
+function createMovies(movies, container) {
+    container.innerHTML = ''
+
     movies.forEach(movie => {
-
-        // const trendingPreviewMovieContainer = document.querySelector('#trendingPreview .trendingPreview-movieList')
 
         const movieContainer = document.createElement('div')
         movieContainer.classList.add('movie-container')
@@ -26,18 +23,15 @@ async function getTrendingMoviesPreview () {
         movieImg.setAttribute('alt', movie.title)
         movieImg.setAttribute('src', 'https://image.tmdb.org/t/p/w300/' + movie.poster_path)
 
-        trendingMoviesPreviewList.appendChild(movieContainer)
+        container.appendChild(movieContainer)
         movieContainer.appendChild(movieImg)
         
     });
     
 }
 
-async function getCategoriesPreview() {
-    const { data } = await api('genre/movie/list')
-    const categories = data.genres
-
-    categoriesPreviewList.innerHTML = ''
+function createCategories(categories, container) {
+    container.innerHTML = ''
 
     categories.forEach(category => {
        
@@ -52,11 +46,29 @@ async function getCategoriesPreview() {
         })
         const categoryTitleText = document.createTextNode(category.name)
 
-        categoriesPreviewList.appendChild(categoryContainer)
+        container.appendChild(categoryContainer)
         categoryContainer.appendChild(categoryTitle)
         categoryTitle.appendChild(categoryTitleText)
     })
-    
+
+}
+
+// Llmados a la API
+
+async function getTrendingMoviesPreview () {
+    const { data } = await api('trending/movie/day')
+    const movies = data.results
+
+    createMovies(movies, trendingMoviesPreviewList)
+
+}
+
+async function getCategoriesPreview() {
+    const { data } = await api('genre/movie/list')
+    const categories = data.genres
+
+    createCategories(categories, categoriesPreviewList)
+
 }
 
 async function getMoviesByCategory(id) {
@@ -66,7 +78,8 @@ async function getMoviesByCategory(id) {
         }
     })
 
-    console.log(data);
-    
+    const movies = data.results
+
+    createMovies(movies, genericSection)
 }
 
